@@ -14,7 +14,7 @@ export class NotesService {
   }
 
   async findOne(id: number) {
-    return this.noteRepository.findBy({
+    return this.noteRepository.findOneBy({
       id: id
     })
   }

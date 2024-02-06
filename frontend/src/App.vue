@@ -8,6 +8,7 @@ const store = useNoteStore();
 
 onMounted(() => {
   store.fetchNotes();
+  console.log('fetched notes')
 })
 </script>
 

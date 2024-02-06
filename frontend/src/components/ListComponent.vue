@@ -6,10 +6,9 @@
           v-for="note in notes"
           :key="note.id"
           class="note-item"
+          @click="event => {$router.push({path: `/notes/${note.id}`})} "
         >
-          <v-list-item-content class="d-flex">
-            <v-list-item-title class="note-text">{{ note.text }}</v-list-item-title>
-          </v-list-item-content>
+          <v-list-item-title class="note-text">{{ note.text }}</v-list-item-title>
         </v-list-item>
       </v-list>
     </v-card>
@@ -19,7 +18,9 @@
 <script setup lang="ts">
 import { defineProps } from 'vue';
 import Note from '@/classes/note';
+import { useNoteStore } from '@/stores/note';
 
+const store = useNoteStore();
 const props = defineProps<{
   notes: Note[];
 }>();
@@ -38,10 +39,5 @@ const props = defineProps<{
 
 .note-text {
   font-size: 16px;
-}
-
-.note-status {
-  color: grey;
-  font-size: 12px;
 }
 </style>
