@@ -1,10 +1,10 @@
 # huang-b40d4c
 
 ## Pre-requisites
-Please make sure you have this pre-requisistes installed
-Node v18
-MySQL 8.3
-mysql-client
+Please make sure you have this pre-requisistes installed:
+- Node v18
+- MySQL 8.3
+- mysql-client
 
 ## Important: Before Setup
 
@@ -17,11 +17,6 @@ DB_USERNAME=root
 DB_PASSWORD=mypassword
 DB_DATABASE=huang-b40d4c
 ```
-
-host: 'localhost',
-port: 3306,
-username: 'root',
-password: '9&Du57XPh9G6Pj',
 
 ## Setup
 
