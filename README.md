@@ -8,7 +8,7 @@ Please make sure you have this pre-requisistes installed:
 
 ## Important: Before Setup
 
-Please configure your host, port, username, password, and database for MySQL in a `.env` file inside `backend/` directory. For example:
+Please configure your host, port, username, password, and database for MySQL in a `.env` file in the project root directory. For example:
 
 ```
 DB_HOST=localhost
