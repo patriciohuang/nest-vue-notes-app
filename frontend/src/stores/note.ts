@@ -58,10 +58,14 @@ export const useNoteStore = defineStore('note', {
       const isArchived = note.archived
       try {
         await axios.put(`http://localhost:3000/notes/${note.id}`, { text: note.text, archived: !isArchived })
-        if (isArchived) {
-          this.fetchArchivedNotes()
+        if (this.noteDetail) {
+          this.noteDetail.archived = !isArchived
         } else {
-          this.fetchNotes()
+          if (isArchived) {
+            this.fetchArchivedNotes()
+          } else {
+            this.fetchNotes()
+          }
         }
       } catch (error) {
         console.log(error)

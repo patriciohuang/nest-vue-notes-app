@@ -2,16 +2,25 @@
   <v-dialog width="500">
     <template v-slot:activator="{ props }">
       <v-btn
+        v-if="!store.noteDetail"
         v-bind="props"
         color="#E53935"
       >
+        <v-icon size="24" icon="mdi-trash-can-outline"></v-icon>
+      </v-btn>
+      <v-btn
+        v-else
+        v-bind="props"
+        color="#E53935"
+      >
+        Delete
         <v-icon size="24" icon="mdi-trash-can-outline"></v-icon>
       </v-btn>
     </template>
     <template v-slot:default="{ isActive }">
       <v-card title="Dialog">
         <v-card-text>
-          Are you sure you want to delete <b class="truncate">{{note?.text}}</b>?<br>This action cannot be undone.
+          Are you sure you want to delete the following note? <b class="truncate">{{note?.text}}</b><br>This action cannot be undone.
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -52,3 +61,12 @@ const acceptDelete = () => {
   }
 };
 </script>
+
+<style>
+.truncate {
+  display: block;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}</style>

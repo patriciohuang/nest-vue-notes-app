@@ -9,22 +9,8 @@
         >
           <div class="w-100 d-flex justify-space-between">
             <v-list-item-title class="note-text w-100 pt-2" @click="event => {$router.push({path: `/notes/${note.id}`})}">{{ note.text }}</v-list-item-title>
-            <v-btn
-              color="#BDBDBD"
-              class="mx-2"
-              @click="store.toggleArchive(note)"
-            >
-              <v-icon v-if="note.archived"
-                size="24"
-                class="archive-icon"
-                icon="mdi-archive-arrow-down-outline">
-              </v-icon>
-              <v-icon v-else size="24"
-                class="archive-icon"
-                icon="mdi-archive-arrow-up-outline">
-              </v-icon>
-            </v-btn>
-            <ModalComponent :note="note"/>
+            <ToggleArchiveComponent :note="note"/>
+            <DeleteModalComponent :note="note"/>
           </div>
         </v-list-item>
       </v-list>
@@ -36,7 +22,8 @@
 <script setup lang="ts">
 import Note from '@/classes/note';
 import { useNoteStore } from '@/stores/note';
-import ModalComponent from './ModalComponent.vue';
+import DeleteModalComponent from './DeleteModalComponent.vue';
+import ToggleArchiveComponent from './ToggleArchiveComponent.vue';
 
 const store = useNoteStore();
 defineProps<{
@@ -61,11 +48,5 @@ defineProps<{
 .archive-icon {
   color: #757575;
 }
-.truncate {
-  display: block;
-  width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+
 </style>

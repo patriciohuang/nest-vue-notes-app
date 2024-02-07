@@ -1,7 +1,8 @@
 <template>
   <v-container>
     <div v-if="noteDetail">
-      <ModalComponent :note="noteDetail"/>
+      <DeleteModalComponent :note="noteDetail"/>
+      <ToggleArchiveComponent :note="noteDetail"/>
       <v-form @submit.prevent="saveNote">
         <v-textarea auto-grow v-model="noteDetail.text"></v-textarea>
         <v-btn class="mx-5" color="hsla(160, 100%, 37%, 1)" type="submit">Save</v-btn>
@@ -20,15 +21,20 @@
 <script setup lang="ts">
 import { useNoteStore } from '@/stores/note';
 import { storeToRefs } from 'pinia';
-import { onMounted } from 'vue';
+import { onMounted, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import ModalComponent from '@/components/ModalComponent.vue';
+import DeleteModalComponent from '@/components/DeleteModalComponent.vue';
+import ToggleArchiveComponent from '@/components/ToggleArchiveComponent.vue';
 
 const route = useRoute();
 const router = useRouter()
 const store = useNoteStore();
 onMounted(() => {
   store.fetchOne(parseInt(route.params.id as string));
+});
+
+onUnmounted( ()=> {
+  store.noteDetail = undefined;
 });
 
 const { noteDetail, noteDetailLoading } = storeToRefs(store);
