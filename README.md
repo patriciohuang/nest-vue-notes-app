@@ -1,5 +1,9 @@
 # huang-b40d4c
 
+## Live running version
+
+https://nest-vue-notes-app.onrender.com/
+
 ## Pre-requisites
 Please make sure you have this pre-requisistes installed:
 - Node v18
