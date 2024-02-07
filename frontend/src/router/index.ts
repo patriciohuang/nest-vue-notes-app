@@ -20,6 +20,10 @@ const router = createRouter({
       path: '/archived',
       name: 'archived',
       component: ArchivedView
+    },
+    {
+      path: '/',
+      redirect: '/notes'
     }
   ]
 })

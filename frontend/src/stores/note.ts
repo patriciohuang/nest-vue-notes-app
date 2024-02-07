@@ -18,7 +18,7 @@ export const useNoteStore = defineStore('note', {
   actions: {
     async fetchNotes() {
       try {
-        const response = await axios.get('http://localhost:3000/notes?archived=false');
+        const response = await axios.get('/api/notes?archived=false');
         this.notes = response.data.map((note: any) => new Note(note.id, note.title, note.text, note.archived));
       } catch (error) {
         this.showSnackbar('Error loading notes', 'error')
@@ -26,7 +26,7 @@ export const useNoteStore = defineStore('note', {
     },
     async fetchArchivedNotes() {
       try {
-        const response = await axios.get('http://localhost:3000/notes?archived=true');
+        const response = await axios.get('/api/notes?archived=true');
         this.archiveNotes = response.data.map((note: any) => new Note(note.id, note.title, note.text, note.archived));
       } catch (error) {
         this.showSnackbar('Error loading notes', 'error')
@@ -34,7 +34,7 @@ export const useNoteStore = defineStore('note', {
     },
     async addNote(newNote: Omit<Note, 'id'>): Promise<Note | undefined> {
       try {
-        const response = await axios.post('http://localhost:3000/notes', newNote);
+        const response = await axios.post('/api/notes', newNote);
         const createdNoteId = response.data
         const createdNote = new Note(createdNoteId, newNote.title, newNote.text, newNote.archived);
         this.notes.push(createdNote);
@@ -46,7 +46,7 @@ export const useNoteStore = defineStore('note', {
     async fetchOne(id: number) {
       this.noteDetailLoading = true
       try {
-        const response = await axios.get(`http://localhost:3000/notes/${id}`);
+        const response = await axios.get(`/api/notes/${id}`);
         const noteData = response.data;
         this.noteDetail = new Note(noteData.id, noteData.title, noteData.text, noteData.archived);
       } catch (error: any) {
@@ -59,7 +59,7 @@ export const useNoteStore = defineStore('note', {
     },
     async update(note: Note): Promise<boolean> {
       try {
-        await axios.put(`http://localhost:3000/notes/${note.id}`, { title: note.title, text: note.text, archived: note.archived })
+        await axios.put(`/api/notes/${note.id}`, { title: note.title, text: note.text, archived: note.archived })
         return true
       } catch (error) {
         return false
@@ -68,7 +68,7 @@ export const useNoteStore = defineStore('note', {
     async toggleArchive(note: Note) {
       const isArchived = note.archived
       try {
-        await axios.put(`http://localhost:3000/notes/${note.id}`, { title: note.title, text: note.text, archived: !isArchived })
+        await axios.put(`/api/notes/${note.id}`, { title: note.title, text: note.text, archived: !isArchived })
         if (this.noteDetail) {
           this.noteDetail.archived = !isArchived
         } else {
@@ -86,7 +86,7 @@ export const useNoteStore = defineStore('note', {
     async delete(note: Note) {
       const isArchived = note.archived
       try {
-        await axios.delete(`http://localhost:3000/notes/${note.id}`)
+        await axios.delete(`/api/notes/${note.id}`)
         this.showSnackbar('Note deleted', 'success')
         if (isArchived) {
           this.fetchArchivedNotes()

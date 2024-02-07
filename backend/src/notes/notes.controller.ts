@@ -4,7 +4,7 @@ import { GetNoteDto } from './dto/getNote.dto';
 import { CreateNoteDto } from './dto/createNote.dto';
 import { UpdateNoteDto } from './dto/updateNote.dto';
 
-@Controller()
+@Controller('api')
 export class NotesController {
   constructor(private readonly notesService: NotesService) {}
 

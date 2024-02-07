@@ -16,4 +16,9 @@ export default defineConfig({
   build: {
     outDir: '../backend/public',
   },
+  server: {
+    proxy: {
+      '/api': 'http://localhost:3000',
+    }
+  }
 })
