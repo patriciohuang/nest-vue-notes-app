@@ -24,7 +24,7 @@
       <v-progress-linear indeterminate color="primary"></v-progress-linear>
     </div>
     <div v-else>
-      <p class="note-not-found">Note not found</p>
+      <p class="note-not-found">404 | Note not found</p>
     </div>
   </v-container>
 </template>
@@ -53,8 +53,13 @@ const { noteDetail, noteDetailLoading } = storeToRefs(store);
 
 const saveNote = async () => {
   if (noteDetail.value) {
-    await store.update(noteDetail.value);
-    router.push('/notes');
+    const success: boolean = await store.update(noteDetail.value);
+    if (success) {
+      router.push('/notes');
+      store.showSnackbar('Note saved', 'success')
+    } else {
+      store.showSnackbar('Error saving the note', 'error')
+    }
   }
 };
 

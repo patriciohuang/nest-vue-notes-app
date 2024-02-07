@@ -53,10 +53,12 @@ const props = defineProps<{
 const acceptDelete = () => {
   if (props.note) {
     store.delete(props.note);
-    if(props.note.archived) {
-      router.push('/archived');
-    } else {
-      router.push('/notes');
+    if (store.noteDetail) {
+      if(props.note.archived) {
+        router.push('/archived');
+      } else {
+        router.push('/notes');
+      }
     }
   }
 };

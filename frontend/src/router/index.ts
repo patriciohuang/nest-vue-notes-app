@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import ArchivedViewVue from '@/views/ArchivedView.vue'
-import NoteViewVue from '@/views/NoteView.vue'
-import DetailViewVue from '@/views/DetailView.vue'
+import ArchivedView from '@/views/ArchivedView.vue'
+import NotesView from '@/views/NotesView.vue'
+import DetailView from '@/views/DetailView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -9,17 +9,17 @@ const router = createRouter({
     {
       path: '/notes',
       name: 'notes',
-      component: NoteViewVue
+      component: NotesView
     },
     {
       path: '/notes/:id',
       name: 'detail',
-      component: DetailViewVue
+      component: DetailView
     },
     {
       path: '/archived',
       name: 'archived',
-      component: ArchivedViewVue
+      component: ArchivedView
     }
   ]
 })

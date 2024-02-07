@@ -20,7 +20,7 @@ import Note from '@/classes/note';
 import { useNoteStore } from '@/stores/note';
 
 const store = useNoteStore();
-const props = defineProps<{
+defineProps<{
   note: Note;
 }>();
 </script>

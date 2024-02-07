@@ -5,7 +5,7 @@
         <v-btn @click="addNote">Add Note</v-btn>
       </v-col>
       <v-col cols="8">
-        <h1 class="text-center">My notes</h1>
+        <h1 class="text-center">Active notes</h1>
       </v-col>
       <v-col cols="2">
       </v-col>
@@ -31,6 +31,8 @@ const addNote = async () => {
   const newNote = await store.addNote({ title: '', text: '', archived: false });
   if (newNote) {
     router.push(`/notes/${newNote.id}`);
+  } else {
+    store.showSnackbar('Error creating a new note', 'error')
   }
 };
 </script>

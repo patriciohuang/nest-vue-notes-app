@@ -2,12 +2,18 @@ import { defineStore } from 'pinia';
 import axios from 'axios';
 import Note from '@/classes/note';
 
+type SnackBarType = 'success' | 'error'
+
 export const useNoteStore = defineStore('note', {
   state: () => ({
     notes: [] as Note[],
     archiveNotes: [] as Note[],
     noteDetail: undefined as Note | undefined,
-    noteDetailLoading: false
+    noteDetailLoading: false,
+    snackbarVisible: false,
+    snackbarType: 'success' as SnackBarType,
+    snackbarTimeout: 1500,
+    snackbarMessage: ''
   }),
   actions: {
     async fetchNotes() {
@@ -15,7 +21,7 @@ export const useNoteStore = defineStore('note', {
         const response = await axios.get('http://localhost:3000/notes?archived=false');
         this.notes = response.data.map((note: any) => new Note(note.id, note.title, note.text, note.archived));
       } catch (error) {
-        console.log(error);
+        this.showSnackbar('Error loading notes', 'error')
       }
     },
     async fetchArchivedNotes() {
@@ -23,7 +29,7 @@ export const useNoteStore = defineStore('note', {
         const response = await axios.get('http://localhost:3000/notes?archived=true');
         this.archiveNotes = response.data.map((note: any) => new Note(note.id, note.title, note.text, note.archived));
       } catch (error) {
-        console.log(error);
+        this.showSnackbar('Error loading notes', 'error')
       }
     },
     async addNote(newNote: Omit<Note, 'id'>): Promise<Note | undefined> {
@@ -34,7 +40,7 @@ export const useNoteStore = defineStore('note', {
         this.notes.push(createdNote);
         return createdNote;
       } catch (error) {
-        console.log(error);
+        return undefined
       }
     },
     async fetchOne(id: number) {
@@ -43,17 +49,20 @@ export const useNoteStore = defineStore('note', {
         const response = await axios.get(`http://localhost:3000/notes/${id}`);
         const noteData = response.data;
         this.noteDetail = new Note(noteData.id, noteData.title, noteData.text, noteData.archived);
-      } catch (error) {
-        console.log(error);
+      } catch (error: any) {
+        if (error.response?.status !== 404) {
+          this.showSnackbar('Error loading note', 'error')
+        }
       } finally {
         this.noteDetailLoading = false
       }
     },
-    async update(note: Note) {
+    async update(note: Note): Promise<boolean> {
       try {
         await axios.put(`http://localhost:3000/notes/${note.id}`, { title: note.title, text: note.text, archived: note.archived })
+        return true
       } catch (error) {
-        console.log(error)
+        return false
       }
     },
     async toggleArchive(note: Note) {
@@ -69,22 +78,30 @@ export const useNoteStore = defineStore('note', {
             this.fetchNotes()
           }
         }
+        this.showSnackbar(`Note ${isArchived ? 'unarchived' : 'archived'}`, 'success')
       } catch (error) {
-        console.log(error)
+        this.showSnackbar(`Error ${isArchived ? 'unarchiving' : 'archiving'} the note`, 'error')
       }
     },
     async delete(note: Note) {
       const isArchived = note.archived
       try {
         await axios.delete(`http://localhost:3000/notes/${note.id}`)
+        this.showSnackbar('Note deleted', 'success')
         if (isArchived) {
           this.fetchArchivedNotes()
         } else {
           this.fetchNotes()
         }
       } catch (error) {
-        console.log(error)
+        this.showSnackbar('Error deleting the note', 'error')
       }
+    },
+    showSnackbar(message: string, type: SnackBarType, timeout = 1500) {
+      this.snackbarMessage = message;
+      this.snackbarType = type;
+      this.snackbarTimeout = timeout;
+      this.snackbarVisible = true;
     }
   },
 });

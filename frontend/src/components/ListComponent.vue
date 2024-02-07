@@ -4,7 +4,7 @@
       <v-list-item
         v-for="note in notes"
         :key="note.id"
-        :title="note.title"
+        :title="note.title || 'Untitled'"
         :subtitle="note.text"
         @click="event => {$router.push({path: `/notes/${note.id}`})}"
       >
@@ -14,7 +14,7 @@
         </template>
       </v-list-item>
     </v-list>
-    <p v-else>No notes</p>
+    <p v-else class="text-center text-body-1">No notes</p>
   </v-container>
 </template>
 

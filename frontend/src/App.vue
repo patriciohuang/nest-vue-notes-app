@@ -14,10 +14,12 @@
     </nav>
   </header>
   <RouterView />
+  <SnackbarComponent/>
 </template>
 
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
+import SnackbarComponent from './components/SnackbarComponent.vue';
 
 </script>
 <style>
