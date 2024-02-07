@@ -43,3 +43,13 @@ cd frontend
 npm run dev
 ```
 
+## Build for production
+
+Build the frontend, this puts the output inside the `backend/public` directory.
+
+```
+cd frontend
+npm run build
+```
+
+Then run the backend normally.
