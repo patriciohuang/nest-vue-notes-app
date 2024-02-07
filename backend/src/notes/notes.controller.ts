@@ -26,8 +26,9 @@ export class NotesController {
   }
 
   @Post('notes')
-  async create(@Body() createNoteDto: CreateNoteDto) {
-    return this.notesService.create(createNoteDto.text)
+  async create(@Body() createNoteDto: CreateNoteDto): Promise<number | undefined> {
+    const createdId = await this.notesService.create(createNoteDto.text)
+    return createdId
   }
 
   @Put('notes/:id')

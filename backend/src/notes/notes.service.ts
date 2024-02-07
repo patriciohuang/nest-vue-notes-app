@@ -27,11 +27,16 @@ export class NotesService {
     })
   }
 
-  async create(text: string) {
-    this.noteRepository.insert({
+  async create(text: string): Promise<number | undefined> {
+    const result = await this.noteRepository.insert({
       text: text,
       archived: false
     });
+    if (result) {
+      console.log(result)
+      console.log(result.identifiers[0].id)
+      return result.identifiers[0].id
+    }
   }
 
   async update(id: number, text: string, archived: boolean) {

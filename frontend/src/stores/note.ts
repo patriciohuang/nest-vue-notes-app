@@ -26,11 +26,13 @@ export const useNoteStore = defineStore('note', {
         console.log(error);
       }
     },
-    async addNote(newNote: Omit<Note, 'id'>) {
+    async addNote(newNote: Omit<Note, 'id'>): Promise<Note | undefined> {
       try {
         const response = await axios.post('http://localhost:3000/notes', newNote);
-        const createdNote = new Note(response.data.id, newNote.text, newNote.archived);
+        const createdNoteId = response.data
+        const createdNote = new Note(createdNoteId, newNote.text, newNote.archived);
         this.notes.push(createdNote);
+        return createdNote;
       } catch (error) {
         console.log(error);
       }
