@@ -1,10 +1,16 @@
 <template>
-  <div class="archived-notes">
-    <h1 class="title">Archived</h1>
-    <v-container>
-      <ListComponent :notes="store.archiveNotes"/>
-    </v-container>
-  </div>
+  <v-container>
+    <v-row>
+      <v-col cols="2">
+      </v-col>
+      <v-col cols="8">
+        <h1 class="text-center">Archived</h1>
+      </v-col>
+      <v-col cols="2">
+      </v-col>
+    </v-row>
+  </v-container>
+  <ListComponent :notes="store.archiveNotes"/>
 </template>
 
 <script setup lang="ts">
@@ -17,17 +23,3 @@ onMounted(() => {
   store.fetchArchivedNotes();
 })
 </script>
-
-<style scoped>
-.archived-notes {
-  padding: 20px;
-}
-
-.title {
-  text-align: center;
-  font-size: 24px;
-  font-weight: bold;
-  color: #676565;
-  margin-bottom: 20px;
-}
-</style>

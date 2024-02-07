@@ -1,20 +1,19 @@
 <template>
   <v-container>
-    <v-card elevation="2" v-if="notes.length > 0">
-      <v-list>
-        <v-list-item
-          v-for="note in notes"
-          :key="note.id"
-          class="note-item"
-        >
-          <div class="w-100 d-flex justify-space-between">
-            <v-list-item-title class="note-text w-100 pt-2" @click="event => {$router.push({path: `/notes/${note.id}`})}">{{ note.text }}</v-list-item-title>
-            <ToggleArchiveComponent :note="note"/>
-            <DeleteModalComponent :note="note"/>
-          </div>
-        </v-list-item>
-      </v-list>
-    </v-card>
+    <v-list v-if="notes.length > 0">
+      <v-list-item
+        v-for="note in notes"
+        :key="note.id"
+        :title="note.title"
+        :subtitle="note.text"
+        @click="event => {$router.push({path: `/notes/${note.id}`})}"
+      >
+        <template v-slot:append>
+          <ToggleArchiveComponent :note="note" class="mx-3"/>
+          <DeleteModalComponent :note="note" class="mx-3"/>
+        </template>
+      </v-list-item>
+    </v-list>
     <p v-else>No notes</p>
   </v-container>
 </template>
@@ -32,10 +31,6 @@ defineProps<{
 </script>
 
 <style scoped>
-.note-item {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-  transition: background-color 0.3s;
-}
 
 .note-item:hover {
   background-color: rgba(0, 0, 0, 0.05);
@@ -45,8 +40,4 @@ defineProps<{
   font-size: 16px;
   line-height: inherit;
 }
-.archive-icon {
-  color: #757575;
-}
-
 </style>

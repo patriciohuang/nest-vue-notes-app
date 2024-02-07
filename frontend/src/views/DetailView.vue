@@ -1,19 +1,30 @@
 <template>
   <v-container>
     <div v-if="noteDetail">
-      <DeleteModalComponent :note="noteDetail"/>
-      <ToggleArchiveComponent :note="noteDetail"/>
+      <div class="d-flex justify-space-between align-center my-3">
+        <ToggleArchiveComponent :note="noteDetail"/>
+        <DeleteModalComponent :note="noteDetail"/>
+      </div>
+      <v-text-field
+        v-model="noteDetail.title"
+        label="Title"
+        required
+        hide-details
+        class="mb-4"
+      ></v-text-field>
       <v-form @submit.prevent="saveNote">
         <v-textarea auto-grow v-model="noteDetail.text"></v-textarea>
-        <v-btn class="mx-5" color="hsla(160, 100%, 37%, 1)" type="submit">Save</v-btn>
-        <v-btn color="#2c3e50" @click="cancel">Cancel</v-btn>
+        <div class="d-flex justify-center mt-4">
+          <v-btn class="mx-5" color="primary" type="submit">Save</v-btn>
+          <v-btn color="grey darken-2" @click="cancel">Cancel</v-btn>
+        </div>
       </v-form>
     </div>
     <div v-else-if="noteDetailLoading">
-      <p>Loading...</p>
+      <v-progress-linear indeterminate color="primary"></v-progress-linear>
     </div>
     <div v-else>
-      <p>Note not found</p>
+      <p class="note-not-found">Note not found</p>
     </div>
   </v-container>
 </template>
@@ -29,11 +40,12 @@ import ToggleArchiveComponent from '@/components/ToggleArchiveComponent.vue';
 const route = useRoute();
 const router = useRouter()
 const store = useNoteStore();
+
 onMounted(() => {
   store.fetchOne(parseInt(route.params.id as string));
 });
 
-onUnmounted( ()=> {
+onUnmounted(() => {
   store.noteDetail = undefined;
 });
 
@@ -52,8 +64,10 @@ const cancel = () => {
 </script>
 
 <style scoped>
-.note-title {
-  font-size: 24px;
-  margin-bottom: 16px;
+.note-not-found {
+  font-size: 18px;
+  color: #757575;
+  text-align: center;
+  margin-top: 20px;
 }
 </style>

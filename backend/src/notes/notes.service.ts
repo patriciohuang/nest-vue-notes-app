@@ -13,7 +13,7 @@ export class NotesService {
     if (archived !== undefined) {
       return this.noteRepository.find({
         where: {
-            archived: archived
+          archived: archived
         },
       })
     } else {
@@ -27,20 +27,20 @@ export class NotesService {
     })
   }
 
-  async create(text: string): Promise<number | undefined> {
+  async create(title: string, text: string): Promise<number | undefined> {
     const result = await this.noteRepository.insert({
+      title: title,
       text: text,
       archived: false
     });
     if (result) {
-      console.log(result)
-      console.log(result.identifiers[0].id)
       return result.identifiers[0].id
     }
   }
 
-  async update(id: number, text: string, archived: boolean) {
+  async update(id: number, title: string, text: string, archived: boolean) {
     this.noteRepository.update(id, {
+      title: title,
       text: text,
       archived: archived
     })

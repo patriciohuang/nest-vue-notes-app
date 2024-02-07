@@ -1,8 +1,7 @@
 <template>
   <v-btn
     color="#BDBDBD"
-    class="mx-2"
-    @click="store.toggleArchive(note)"
+    @click.stop="store.toggleArchive(note)"
   >
     {{ store.noteDetail ? (note.archived ? 'Unrchive' : 'Archive') : '' }}
     <v-icon v-if="!note.archived"

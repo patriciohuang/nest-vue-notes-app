@@ -5,10 +5,12 @@ export class Note {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column()
+  title: string
+
   @Column('text')
   text: string;
 
   @Column()
   archived: boolean;
-
 }

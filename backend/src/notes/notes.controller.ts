@@ -14,6 +14,7 @@ export class NotesController {
     return (await this.notesService.findAll(archivedParam)).map(note => {
       const dto = new GetNoteDto()
       dto.id = note.id
+      dto.title = note.title
       dto.text = note.text
       dto.archived = note.archived
       return dto
@@ -27,13 +28,13 @@ export class NotesController {
 
   @Post('notes')
   async create(@Body() createNoteDto: CreateNoteDto): Promise<number | undefined> {
-    const createdId = await this.notesService.create(createNoteDto.text)
+    const createdId = await this.notesService.create(createNoteDto.title, createNoteDto.text)
     return createdId
   }
 
   @Put('notes/:id')
   async update(@Param('id') id: number, @Body() updateNoteDto: UpdateNoteDto) {
-    return this.notesService.update(id, updateNoteDto.text, updateNoteDto.archived)
+    return this.notesService.update(id, updateNoteDto.title, updateNoteDto.text, updateNoteDto.archived)
   }
 
   @Delete('notes/:id')

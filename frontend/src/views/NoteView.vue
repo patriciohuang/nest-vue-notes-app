@@ -1,18 +1,23 @@
 <template>
   <v-container>
-    <v-row class="d-flex align-right">
-      <v-col cols="12" md="2">
+    <v-row align="center" justify="space-between">
+      <v-col cols="2">
         <v-btn @click="addNote">Add Note</v-btn>
       </v-col>
+      <v-col cols="8">
+        <h1 class="text-center">My notes</h1>
+      </v-col>
+      <v-col cols="2">
+      </v-col>
     </v-row>
-    <ListComponent :notes="store.notes"/>
   </v-container>
+  <ListComponent :notes="store.notes"/>
 </template>
 
 <script setup lang="ts">
 import ListComponent from '@/components/ListComponent.vue';
 import { useNoteStore } from '@/stores/note';
-import { onMounted, ref } from 'vue';
+import { onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
 const store = useNoteStore();
@@ -23,7 +28,7 @@ onMounted(() => {
 });
 
 const addNote = async () => {
-  const newNote = await store.addNote({ text: '', archived: false });
+  const newNote = await store.addNote({ title: '', text: '', archived: false });
   if (newNote) {
     router.push(`/notes/${newNote.id}`);
   }
