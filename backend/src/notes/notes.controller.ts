@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { NotesService } from './notes.service';
 import { GetNoteDto } from './dto/getNote.dto';
 import { CreateNoteDto } from './dto/createNote.dto';
@@ -9,8 +9,9 @@ export class NotesController {
   constructor(private readonly notesService: NotesService) {}
 
   @Get('notes')
-  async getAll(): Promise<GetNoteDto[]> {
-    return (await this.notesService.findAll()).map(note => {
+  async getAll(@Query('archived') archived: string | undefined): Promise<GetNoteDto[]> {
+    const archivedParam = archived ? archived === 'true' : undefined
+    return (await this.notesService.findAll(archivedParam)).map(note => {
       const dto = new GetNoteDto()
       dto.id = note.id
       dto.text = note.text

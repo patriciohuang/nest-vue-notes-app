@@ -9,8 +9,16 @@ export class NotesService {
     private noteRepository: Repository<Note>,
   ) {}
 
-  async findAll(): Promise<Note[]> {
-    return this.noteRepository.find();
+  async findAll(archived: boolean | undefined): Promise<Note[]> {
+    if (archived !== undefined) {
+      return this.noteRepository.find({
+        where: {
+            archived: archived
+        },
+      })
+    } else {
+      return this.noteRepository.find();
+    }
   }
 
   async findOne(id: number) {

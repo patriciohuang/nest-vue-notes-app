@@ -10,8 +10,12 @@
 <script setup lang="ts">
 import ListComponent from '@/components/ListComponent.vue';
 import { useNoteStore } from '@/stores/note';
+import { onMounted } from 'vue';
 
 const store = useNoteStore();
+onMounted(() => {
+  store.fetchArchivedNotes();
+})
 </script>
 
 <style scoped>

@@ -1,15 +1,5 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import { useNoteStore } from './stores/note';
-import { onMounted } from 'vue';
-
-
-const store = useNoteStore();
-
-onMounted(() => {
-  store.fetchNotes();
-  console.log('fetched notes')
-})
 </script>
 
 <template>
@@ -20,7 +10,6 @@ onMounted(() => {
       <RouterLink to="/archived">Archived</RouterLink>
     </nav>
   </header>
-
   <RouterView />
 </template>
 

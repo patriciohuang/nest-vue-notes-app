@@ -17,9 +17,14 @@
 <script setup lang="ts">
 import ListComponent from '@/components/ListComponent.vue';
 import { useNoteStore } from '@/stores/note';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 const store = useNoteStore();
+
+onMounted(() => {
+  store.fetchNotes();
+})
+
 const noteText = ref('');
 
 const addNote = async () => {
