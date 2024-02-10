@@ -19,7 +19,7 @@ DB_HOST=localhost
 DB_PORT=3306
 DB_USERNAME=root
 DB_PASSWORD=mypassword
-DB_DATABASE=huang-b40d4c
+DB_DATABASE=database
 ```
 
 ## Setup
