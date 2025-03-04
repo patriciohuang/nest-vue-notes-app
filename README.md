@@ -1,4 +1,4 @@
-# huang-1ea0c6
+# nest-vue-notes-app
 
 ## Pre-requisites
 - Node v22
