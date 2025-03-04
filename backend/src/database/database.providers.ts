@@ -1,23 +1,17 @@
 import { DataSource } from 'typeorm';
 import * as dotenv from 'dotenv';
 
-dotenv.config({path: '../.env'});
+dotenv.config({ path: '../.env' });
 
 export const databaseProviders = [
   {
     provide: 'DATA_SOURCE',
     useFactory: async () => {
       const dataSource = new DataSource({
-        type: 'mysql',
-        host: process.env.DB_HOST,
-        port: parseInt(process.env.DB_PORT),
-        username: process.env.DB_USERNAME,
-        password: process.env.DB_PASSWORD,
-        database: process.env.DB_DATABASE,
-        entities: [
-            __dirname + '/../**/*.entity{.ts,.js}',
-        ],
-        synchronize: true,
+        type: 'sqlite',
+        database: process.env.DB_DATABASE || './data/mydatabase.sqlite', // Default SQLite file
+        entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+        synchronize: true, // Auto-creates tables (for dev only)
       });
 
       return dataSource.initialize();

@@ -2,16 +2,32 @@
   <v-container>
     <div v-if="noteDetail">
       <div class="d-flex justify-space-between align-center my-3">
-        <ToggleArchiveComponent :note="noteDetail"/>
-        <DeleteModalComponent :note="noteDetail"/>
+        <ToggleArchiveComponent :note="noteDetail" />
+        <DeleteModalComponent :note="noteDetail" />
       </div>
-      <v-text-field
-        v-model="noteDetail.title"
-        label="Title"
-        required
-        hide-details
-        class="mb-4"
-      ></v-text-field>
+      <v-row>
+        <v-col cols="12" md="8">
+          <v-text-field
+            v-model="noteDetail.title"
+            label="Title"
+            required
+            hide-details
+            class="mb-4"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" md="4">
+          <v-select
+            v-model="noteDetail.categories"
+            :items="categories"
+            item-title="name"
+            label="categories"
+            class="mb-4"
+            return-object
+            multiple
+            chips
+          ></v-select>
+        </v-col>
+      </v-row>
       <v-form @submit.prevent="saveNote">
         <v-textarea auto-grow v-model="noteDetail.text"></v-textarea>
         <div class="d-flex justify-center mt-4">
@@ -32,13 +48,13 @@
 <script setup lang="ts">
 import { useNoteStore } from '@/stores/note';
 import { storeToRefs } from 'pinia';
-import { onMounted, onUnmounted } from 'vue';
+import { computed, onMounted, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import DeleteModalComponent from '@/components/DeleteModalComponent.vue';
 import ToggleArchiveComponent from '@/components/ToggleArchiveComponent.vue';
 
 const route = useRoute();
-const router = useRouter()
+const router = useRouter();
 const store = useNoteStore();
 
 onMounted(() => {
@@ -51,14 +67,16 @@ onUnmounted(() => {
 
 const { noteDetail, noteDetailLoading } = storeToRefs(store);
 
+const categories = computed(() => store.categories);
+
 const saveNote = async () => {
   if (noteDetail.value) {
     const success: boolean = await store.update(noteDetail.value);
     if (success) {
       router.push('/notes');
-      store.showSnackbar('Note saved', 'success')
+      store.showSnackbar('Note saved', 'success');
     } else {
-      store.showSnackbar('Error saving the note', 'error')
+      store.showSnackbar('Error saving the note', 'error');
     }
   }
 };

@@ -4,10 +4,35 @@
       <v-list-item
         v-for="note in notes"
         :key="note.id"
-        :title="note.title || 'Untitled'"
-        :subtitle="note.text"
         @click="event => {$router.push({path: `/notes/${note.id}`})}"
       >
+        <template v-slot:prepend>
+          <v-icon color="primary">mdi-circle-medium</v-icon>
+        </template>
+
+        <!-- Title with Chips -->
+        <template v-slot:title>
+          <div class="d-flex align-center">
+            <span class="note-title">{{ note.title || 'Untitled' }}</span>
+            <v-chip
+              v-for="category in note.categories"
+              :key="category.id"
+              class="ml-2"
+              color="primary"
+              size="x-small"
+              label
+            >
+              {{ category.name }}
+            </v-chip>
+          </div>
+        </template>
+
+        <!-- Subtitle (Note Text) -->
+        <template v-slot:subtitle>
+          {{ note.text }}
+        </template>
+
+        <!-- Category Chips -->
         <template v-slot:append>
           <ToggleArchiveComponent :note="note" class="mx-3"/>
           <DeleteModalComponent :note="note" class="mx-3"/>

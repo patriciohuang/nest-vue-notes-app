@@ -1,11 +1,13 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
 import Note from '@/classes/note';
+import Category from '@/classes/category';
 
 type SnackBarType = 'success' | 'error'
 
 export const useNoteStore = defineStore('note', {
   state: () => ({
+    categories: [] as Category[],
     notes: [] as Note[],
     archiveNotes: [] as Note[],
     noteDetail: undefined as Note | undefined,
@@ -16,27 +18,45 @@ export const useNoteStore = defineStore('note', {
     snackbarMessage: ''
   }),
   actions: {
-    async fetchNotes() {
+    async fetchCategories() {
       try {
-        const response = await axios.get('/api/notes?archived=false');
-        this.notes = response.data.map((note: any) => new Note(note.id, note.title, note.text, note.archived));
+        const response = await axios.get('/api/categories');
+        this.categories = response.data.map(
+          (category: any) => new Category(category.id, category.name)
+        ); // Store categories as Category objects
       } catch (error) {
-        this.showSnackbar('Error loading notes', 'error')
+        this.showSnackbar('Error loading categories', 'error');
+      }
+    },
+    async fetchNotes(category?: Category) {
+      try {
+        const params: Record<string, string> = { archived: 'false' };
+
+        if (category) {
+          params.categoryId = `${category.id}`;
+        }
+
+        const response = await axios.get('/api/notes', { params });
+        this.notes = response.data.map(
+          (note: any) => new Note(note.id, note.title, note.categories.map((c: any) => new Category(c.id, c.name)), note.text, note.archived)
+        );
+      } catch (error) {
+        this.showSnackbar('Error loading notes', 'error');
       }
     },
     async fetchArchivedNotes() {
       try {
         const response = await axios.get('/api/notes?archived=true');
-        this.archiveNotes = response.data.map((note: any) => new Note(note.id, note.title, note.text, note.archived));
+        this.archiveNotes = response.data.map((note: any) => new Note(note.id, note.title, note.categories, note.text, note.archived));
       } catch (error) {
         this.showSnackbar('Error loading notes', 'error')
       }
     },
     async addNote(newNote: Omit<Note, 'id'>): Promise<Note | undefined> {
       try {
-        const response = await axios.post('/api/notes', newNote);
+        const response = await axios.post('/api/notes', {...newNote});
         const createdNoteId = response.data
-        const createdNote = new Note(createdNoteId, newNote.title, newNote.text, newNote.archived);
+        const createdNote = new Note(createdNoteId, newNote.title, newNote.categories, newNote.text, newNote.archived);
         this.notes.push(createdNote);
         return createdNote;
       } catch (error) {
@@ -48,9 +68,11 @@ export const useNoteStore = defineStore('note', {
       try {
         const response = await axios.get(`/api/notes/${id}`);
         const noteData = response.data;
-        this.noteDetail = new Note(noteData.id, noteData.title, noteData.text, noteData.archived);
+        const categories = noteData.categories.map((c: any) => new Category(c.id, c.name))
+        this.noteDetail = new Note(noteData.id, noteData.title, categories, noteData.text, noteData.archived);
       } catch (error: any) {
         if (error.response?.status !== 404) {
+          console.error(error)
           this.showSnackbar('Error loading note', 'error')
         }
       } finally {
@@ -58,8 +80,9 @@ export const useNoteStore = defineStore('note', {
       }
     },
     async update(note: Note): Promise<boolean> {
+      const categoryIds = note.categories.map(c => c.id)
       try {
-        await axios.put(`/api/notes/${note.id}`, { title: note.title, text: note.text, archived: note.archived })
+        await axios.put(`/api/notes/${note.id}`, { title: note.title, categoryIds, text: note.text, archived: note.archived })
         return true
       } catch (error) {
         return false
@@ -67,8 +90,9 @@ export const useNoteStore = defineStore('note', {
     },
     async toggleArchive(note: Note) {
       const isArchived = note.archived
+      const categoryIds = note.categories.map(c => c.id)
       try {
-        await axios.put(`/api/notes/${note.id}`, { title: note.title, text: note.text, archived: !isArchived })
+        await axios.put(`/api/notes/${note.id}`, { title: note.title, categoryIds, text: note.text, archived: !isArchived })
         if (this.noteDetail) {
           this.noteDetail.archived = !isArchived
         } else {

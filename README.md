@@ -1,35 +1,16 @@
-# huang-b40d4c
-
-## Live running version
-
-https://nest-vue-notes-app.onrender.com/
+# huang-1ea0c6
 
 ## Pre-requisites
-Please make sure you have this pre-requisistes installed:
-- Node v18
-- MySQL 8.3
-- mysql-client
+- Node v22
 
-## Important: Before Setup
+## Setup and run
 
-Please configure your host, port, username, password, and database name for MySQL in a `.env` file in the project root directory. For example:
-
+A script is included to setup nvm, node and all the dependencies, and run both the backend and frontend automatically
 ```
-DB_HOST=localhost
-DB_PORT=3306
-DB_USERNAME=root
-DB_PASSWORD=mypassword
-DB_DATABASE=database
+bash ./run.sh
 ```
 
-## Setup
-
-Run
-```
-bash ./setup.sh
-```
-
-## Run
+## Run manually
 
 To run the app locally we need to run 2 separate commands in 2 separate terminal instances:
 
@@ -37,6 +18,7 @@ For the backend:
 
 ```
 cd backend
+nvm use
 npm run start:dev
 ```
 
@@ -44,6 +26,7 @@ For the frontend:
 
 ```
 cd frontend
+nvm use
 npm run dev
 ```
 
@@ -53,6 +36,7 @@ Build the frontend, this puts the output inside the `backend/public` directory.
 
 ```
 cd frontend
+nvm use
 npm run build
 ```
 

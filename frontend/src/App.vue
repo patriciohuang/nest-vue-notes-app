@@ -20,6 +20,10 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
 import SnackbarComponent from './components/SnackbarComponent.vue';
+import { useNoteStore } from '@/stores/note';
+
+const store = useNoteStore();
+store.fetchCategories()
 
 </script>
 <style>
